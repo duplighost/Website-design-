@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Doopliss</title>
-  <meta name="description" content="Bright hooks, murder-pop gloss, and emotionally catastrophic subtext." />
+  <title>Doopliss — murder pop transmission</title>
+  <meta name="description" content="Doopliss: bright hooks, murder-pop gloss, and emotionally catastrophic subtext. The hooks invite you in; the subtext locks the door behind you." />
+  <meta name="theme-color" content="#0a0510" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Doopliss" />
   <meta property="og:description" content="Bright hooks, murder-pop gloss, and emotionally catastrophic subtext." />
@@ -21,23 +22,307 @@
   <meta name="twitter:image:alt" content="Doopliss preview image" />
   <link rel="canonical" href="https://qualiacology.com/doopliss/" />
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+  <link rel="apple-touch-icon" href="/assets/icon-192.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
   <style>
-    :root { color-scheme: dark; }
-    body { margin:0; min-height:100vh; display:grid; place-items:center; font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background:radial-gradient(circle at 20% 10%,rgba(255,94,173,.18),transparent 30%),radial-gradient(circle at 80% 20%,rgba(105,226,255,.14),transparent 28%),linear-gradient(180deg,#07070d,#13172b); color:#f7f4ff; }
-    main { width:min(760px,calc(100vw - 40px)); padding:38px; border:1px solid rgba(255,255,255,.13); border-radius:28px; background:rgba(12,15,30,.78); box-shadow:0 28px 80px rgba(0,0,0,.38); }
-    p.kicker { color:#a6f0ff; text-transform:uppercase; letter-spacing:.18em; font-size:.78rem; font-weight:800; margin:0 0 10px; }
-    h1 { font-size:clamp(2.4rem,7vw,4.4rem); line-height:.95; margin:.1em 0 .22em; }
-    p { color:#d8d4e8; font-size:1.08rem; line-height:1.65; }
-    a { color:#69e2ff; font-weight:800; }
+    :root {
+      /* Shared design tokens (so the FX engine resolves on this page too) */
+      --bg-0:#07070d; --bg-1:#0d1020; --bg-2:#13172b;
+      --text:#fdf2fb; --muted:#e3b9d6; --muted-strong:#b78aab;
+      --line:rgba(255,255,255,0.1); --line-strong:rgba(255,255,255,0.18);
+      --pink:#ff5ead; --pink-soft:#ff8fc8; --violet:#8f72ff; --violet-soft:#b8a7ff;
+      --cyan:#69e2ff; --cyan-soft:#a6f0ff; --mint:#70f3cf; --gold:#ffd27a; --gold-soft:#ffe3ae;
+      --danger:#ff6d86; --radius:28px; --radius-sm:18px; --container:1120px;
+      /* Doopliss-specific */
+      --magenta:#ff3d8b; --candy:#ff8fc8; --caution:#ffd45e;
+      --transition:220ms ease;
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; overflow-x:clip; }
+    body {
+      margin:0; min-height:100vh; line-height:1.6; overflow-x:hidden;
+      font-family:"Inter",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 12% 8%, rgba(255,61,139,0.26), transparent 32%),
+        radial-gradient(circle at 88% 12%, rgba(105,226,255,0.14), transparent 28%),
+        radial-gradient(circle at 70% 88%, rgba(143,114,255,0.18), transparent 34%),
+        linear-gradient(180deg, #0a0510 0%, #150818 42%, #1c0a1a 100%);
+    }
+    /* faint broadcast scanlines */
+    body::before {
+      content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+      background-image:repeating-linear-gradient(180deg, rgba(255,255,255,0.022) 0 1px, transparent 1px 3px);
+      mix-blend-mode:overlay; opacity:0.5;
+    }
+    img,iframe { display:block; max-width:100%; }
+    a { color:inherit; text-decoration:none; }
+    button,input { font:inherit; }
+    ::selection { background:rgba(255,61,139,0.4); color:#fff; }
+    .wrap { width:min(var(--container), calc(100vw - 2.4rem)); margin-inline:auto; position:relative; z-index:1; }
+
+    /* ---- top bar ---- */
+    .topbar {
+      position:sticky; top:0; z-index:120;
+      backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+      background:linear-gradient(180deg, rgba(10,5,16,0.82), rgba(10,5,16,0.4));
+      border-bottom:1px solid rgba(255,143,200,0.16);
+    }
+    .topbar .wrap { display:flex; align-items:center; justify-content:space-between; gap:1rem; height:62px; }
+    .back-link { display:inline-flex; align-items:center; gap:0.55rem; color:var(--muted); font-weight:600; font-size:0.92rem; transition:color var(--transition); }
+    .back-link:hover { color:var(--text); }
+    .topbar .mark { font-family:"Space Grotesk",sans-serif; font-weight:700; letter-spacing:0.04em; color:var(--candy); }
+    .topbar .links { display:flex; gap:0.5rem; }
+    .topbar .links a { width:2.3rem; height:2.3rem; display:grid; place-items:center; border-radius:999px; border:1px solid rgba(255,143,200,0.22); color:var(--candy); transition:all var(--transition); }
+    .topbar .links a:hover { background:rgba(255,94,173,0.16); transform:translateY(-2px); }
+
+    /* ---- hero ---- */
+    .hero { position:relative; overflow:hidden; padding:clamp(3rem,9vw,6.5rem) 0 clamp(2rem,5vw,3.5rem); }
+    .hero-visuals { position:absolute; inset:0; pointer-events:none; z-index:0; }
+    .hero .wrap { text-align:center; }
+    .sticker {
+      display:inline-flex; align-items:center; gap:0.5rem; transform:rotate(-2.4deg);
+      padding:0.45rem 0.9rem; border-radius:8px; margin-bottom:1.3rem;
+      font-weight:800; font-size:0.74rem; letter-spacing:0.16em; text-transform:uppercase; color:#180206;
+      background:repeating-linear-gradient(45deg, var(--caution) 0 12px, #1a1206 12px 24px);
+      box-shadow:0 10px 30px rgba(0,0,0,0.4);
+    }
+    .sticker span { background:var(--caution); padding:0.15rem 0.5rem; border-radius:4px; }
+    .hero-title {
+      font-family:"Space Grotesk",sans-serif; font-weight:700;
+      font-size:clamp(3.4rem,15vw,9rem); line-height:0.86; letter-spacing:-0.04em; margin:0;
+      background:linear-gradient(120deg,#ff8fc8 0%, #ff3d8b 30%, #b8a7ff 60%, #69e2ff 100%);
+      background-size:240% 240%; -webkit-background-clip:text; background-clip:text; color:transparent;
+      animation:candyFlow 14s ease-in-out infinite;
+      filter:drop-shadow(0 0 36px rgba(255,61,139,0.4));
+    }
+    @keyframes candyFlow { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
+    .hero-tagline { max-width:34rem; margin:1.4rem auto 0; font-size:clamp(1.05rem,2.4vw,1.3rem); color:var(--candy); }
+    .hero-sub { max-width:40rem; margin:0.9rem auto 0; color:var(--muted); }
+    .transmission {
+      display:inline-flex; align-items:center; gap:0.6rem; margin-top:1.7rem;
+      padding:0.5rem 1rem; border-radius:999px; font-size:0.76rem; letter-spacing:0.18em; text-transform:uppercase; font-weight:700;
+      color:var(--candy); border:1px solid rgba(255,143,200,0.3); background:rgba(255,61,139,0.08);
+    }
+    .transmission .blip { width:0.6rem; height:0.6rem; border-radius:50%; background:var(--magenta); box-shadow:0 0 12px var(--magenta); animation:blip 1.5s ease-in-out infinite; }
+    @keyframes blip { 0%,100%{opacity:1; transform:scale(1)} 50%{opacity:0.3; transform:scale(0.7)} }
+
+    /* ---- start-here trio ---- */
+    .section { padding:clamp(2.4rem,6vw,4rem) 0; position:relative; z-index:1; }
+    .eyebrow { color:var(--candy); text-transform:uppercase; letter-spacing:0.2em; font-size:0.74rem; font-weight:800; margin:0 0 0.5rem; }
+    .h2 { font-family:"Space Grotesk",sans-serif; font-size:clamp(1.8rem,4.5vw,2.6rem); margin:0; letter-spacing:-0.02em; }
+    .lead { color:var(--muted); max-width:46rem; margin:0.7rem 0 0; }
+    .start-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1rem; margin-top:1.7rem; }
+    .start-card {
+      position:relative; overflow:hidden; padding:1.4rem; border-radius:22px;
+      border:1px solid rgba(255,143,200,0.2); background:linear-gradient(160deg, rgba(40,12,32,0.82), rgba(18,8,20,0.9));
+      box-shadow:0 22px 60px rgba(0,0,0,0.3); transition:transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+      display:flex; flex-direction:column; gap:0.45rem;
+    }
+    .start-card::before { content:""; position:absolute; inset:-1px; z-index:-1; opacity:0.7; background:radial-gradient(circle at 30% 0%, var(--c, var(--magenta)), transparent 55%); transition:opacity var(--transition); }
+    .start-card:hover { transform:translateY(-5px); border-color:rgba(255,143,200,0.45); box-shadow:0 30px 80px rgba(0,0,0,0.42); }
+    .start-card:hover::before { opacity:1; }
+    .start-card .tag { font-size:0.7rem; letter-spacing:0.16em; text-transform:uppercase; font-weight:800; color:var(--caution); }
+    .start-card h3 { font-family:"Space Grotesk",sans-serif; font-size:1.3rem; margin:0; line-height:1.05; }
+    .start-card p { color:var(--muted); font-size:0.92rem; margin:0.2rem 0 0.7rem; }
+    .start-card .go { margin-top:auto; display:inline-flex; align-items:center; gap:0.45rem; color:var(--candy); font-weight:700; font-size:0.9rem; }
+
+    /* ---- album grid ---- */
+    .album-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1.2rem; margin-top:1.8rem; }
+    .album {
+      position:relative; overflow:hidden; border-radius:22px; isolation:isolate;
+      border:1px solid rgba(255,143,200,0.18); background:rgba(16,8,18,0.78);
+      box-shadow:0 18px 50px rgba(0,0,0,0.3); transition:transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+      display:flex; flex-direction:column;
+    }
+    .album:hover { transform:translateY(-4px); border-color:rgba(255,94,173,0.42); box-shadow:0 28px 70px rgba(0,0,0,0.42), 0 0 50px rgba(255,61,139,0.18); }
+    .album::after { content:""; position:absolute; inset:0; pointer-events:none; z-index:3; background:linear-gradient(115deg, transparent 0%, rgba(255,255,255,0.14) 42%, transparent 58%); transform:translateX(-130%); transition:transform 760ms ease; }
+    .album:hover::after { transform:translateX(130%); }
+    .album-embed { position:relative; aspect-ratio:16/9; background:#000; border-bottom:1px solid rgba(255,143,200,0.16); }
+    .album-embed iframe { position:absolute; inset:0; width:100%; height:100%; border:0; }
+    .album-cover { aspect-ratio:16/9; display:flex; flex-direction:column; justify-content:space-between; padding:1.1rem; border-bottom:1px solid rgba(255,143,200,0.16); position:relative; overflow:hidden; }
+    .album-cover.c-hotline { background:radial-gradient(circle at 80% 20%, rgba(255,61,139,0.5), transparent 60%), linear-gradient(150deg,#3a0b2a,#120612); }
+    .album-cover.c-guilty { background:radial-gradient(circle at 20% 20%, rgba(184,167,255,0.45), transparent 60%), linear-gradient(150deg,#2a0f3a,#120612); }
+    .album-cover .ctop { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; font-weight:800; color:var(--candy); }
+    .album-cover .ctitle { font-family:"Space Grotesk",sans-serif; font-size:clamp(1.4rem,3vw,2rem); line-height:0.98; }
+    .album-cover .cnote { font-size:0.8rem; color:var(--muted); }
+    .album-warn { position:absolute; top:0.7rem; right:0.7rem; z-index:4; transform:rotate(4deg); font-size:0.62rem; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:#180206; background:var(--caution); padding:0.2rem 0.5rem; border-radius:5px; box-shadow:0 6px 16px rgba(0,0,0,0.4); }
+    .album-body { padding:1.1rem 1.2rem 1.3rem; display:flex; flex-direction:column; gap:0.6rem; flex:1; }
+    .album-body h3 { font-family:"Space Grotesk",sans-serif; font-size:1.22rem; margin:0; letter-spacing:-0.01em; }
+    .album-body p { color:var(--muted); font-size:0.9rem; margin:0; line-height:1.55; }
+    .suno-link { display:inline-flex; align-items:center; gap:0.45rem; color:var(--cyan-soft); font-weight:700; font-size:0.88rem; }
+    .suno-link:hover { color:#fff; }
+    .tags { display:flex; flex-wrap:wrap; gap:0.4rem; margin-top:auto; padding-top:0.3rem; }
+    .tags span { font-size:0.68rem; letter-spacing:0.08em; text-transform:uppercase; font-weight:700; color:var(--candy); padding:0.22rem 0.55rem; border-radius:999px; border:1px solid rgba(255,143,200,0.26); background:rgba(255,61,139,0.07); }
+
+    /* ---- links band + footer ---- */
+    .links-band { display:flex; flex-wrap:wrap; gap:0.8rem; margin-top:1.6rem; }
+    .button { display:inline-flex; align-items:center; gap:0.55rem; padding:0.8rem 1.4rem; border-radius:999px; font-weight:700; border:1px solid rgba(255,143,200,0.28); color:var(--text); background:rgba(255,61,139,0.1); transition:all var(--transition); }
+    .button:hover { transform:translateY(-2px); background:rgba(255,61,139,0.2); box-shadow:0 16px 40px rgba(255,61,139,0.26); }
+    .button.cyan { color:#06222b; background:linear-gradient(120deg,var(--cyan),var(--cyan-soft)); border-color:transparent; }
+    footer { padding:3rem 0 4rem; text-align:center; position:relative; z-index:1; border-top:1px solid rgba(255,143,200,0.14); margin-top:2rem; }
+    footer p { color:var(--muted-strong); font-size:0.88rem; }
+
+    @media (max-width:900px) {
+      .start-grid { grid-template-columns:1fr; }
+      .album-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    }
+    @media (max-width:600px) {
+      .album-grid { grid-template-columns:1fr; }
+      .topbar .mark { display:none; }
+    }
+    @media (prefers-reduced-motion:reduce) {
+      .hero-title { animation:none; } .blip { animation:none; } .album::after { transition:none; }
+    }
   </style>
+
+  <link rel="stylesheet" href="/assets/site-ambient.css" />
+  <link rel="stylesheet" href="/assets/site-fx.css" />
+  <script src="/assets/site-ambient.js" defer></script>
+  <script src="/assets/site-fx.js" defer></script>
 </head>
 <body>
+  <header class="topbar">
+    <div class="wrap">
+      <a class="back-link" href="/"><i class="fa-solid fa-arrow-left-long"></i> Qualiacology</a>
+      <span class="mark">Doopliss</span>
+      <div class="links">
+        <a href="https://suno.com/@doopliss" target="_blank" rel="noopener noreferrer" aria-label="Suno"><i class="fa-solid fa-wave-square"></i></a>
+        <a href="https://www.tiktok.com/@duplighost" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+      </div>
+    </div>
+  </header>
+
   <main>
-    <p class="kicker">Music</p>
-    <h1>Doopliss</h1>
-    <p>Bright hooks, murder-pop gloss, and emotionally catastrophic subtext.</p>
-    <p><a href="/#music">Continue to this section</a></p>
+    <section class="hero">
+      <div class="hero-visuals" aria-hidden="true"></div>
+      <div class="wrap">
+        <p class="sticker"><span>⚠</span> Murder pop — emotional content not rated</p>
+        <h1 class="hero-title">Doopliss</h1>
+        <p class="hero-tagline">Bright, catchy, upbeat melodies with psychologically dark, emotionally raw lyrics.</p>
+        <p class="hero-sub">The hooks invite you in. The subtext quietly locks the door behind you. It lives in that deliciously wrong sweet spot between neon-pop seduction and emotional sabotage — playful, glossy, a little dangerous, and never interested in pretending the dark stuff only sounds dark.</p>
+        <div class="transmission"><span class="blip" aria-hidden="true"></span> Now broadcasting</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <p class="eyebrow">Where to start</p>
+        <h2 class="h2">Three ways in</h2>
+        <p class="lead">No fake "newest" badges on year-old songs. Here's what's actually new, where to start clean, and where to go if you want the whole toxic cycle at once.</p>
+        <div class="start-grid">
+          <a class="start-card" href="https://www.youtube.com/watch?v=CY1al0jKaxY" target="_blank" rel="noopener noreferrer" style="--c:rgba(255,61,139,0.45)">
+            <span class="tag">◖ newest</span>
+            <h3>Immortalized</h3>
+            <p>The latest transmission. Redemption was never on the table — he doesn't repent, he gets remembered.</p>
+            <span class="go">Play it <i class="fa-solid fa-arrow-right"></i></span>
+          </a>
+          <a class="start-card" href="https://www.youtube.com/watch?v=QzVcPeFDiAc" target="_blank" rel="noopener noreferrer" style="--c:rgba(184,167,255,0.45)">
+            <span class="tag">★ best entry point</span>
+            <h3>Cherry Lipstick</h3>
+            <p>New here? Start with the field guide to red flags — rom-com energy with a switchblade in the purse.</p>
+            <span class="go">Start here <i class="fa-solid fa-arrow-right"></i></span>
+          </a>
+          <a class="start-card" href="https://www.youtube.com/watch?v=ByeMWC_DpcU" target="_blank" rel="noopener noreferrer" style="--c:rgba(105,226,255,0.4)">
+            <span class="tag">▼ the deep end</span>
+            <h3>Death Threats &amp; Makeup Sex</h3>
+            <p>28 tracks of the entire toxic loop on repeat. Love and destruction share a zip code; this is the address.</p>
+            <span class="go">Go all in <i class="fa-solid fa-arrow-right"></i></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <p class="eyebrow">The catalogue</p>
+        <h2 class="h2">Every infection on file</h2>
+        <p class="lead">Six broadcasts, each one prettier and more wrong than it has any right to be.</p>
+
+        <div class="album-grid">
+          <article class="album">
+            <div class="album-embed"><iframe src="https://www.youtube.com/embed/CY1al0jKaxY" title="Immortalized" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>
+            <div class="album-body">
+              <h3>Immortalized</h3>
+              <p>The one where redemption was never on the table and the songs are the receipt. He doesn't repent — he gets remembered, lacquered into permanence by the same glossy hooks that should have buried him.</p>
+              <div class="tags"><span>new</span><span>villain pop</span><span>permanent record</span></div>
+            </div>
+          </article>
+
+          <article class="album">
+            <div class="album-cover c-hotline">
+              <span class="album-warn">do not dial</span>
+              <span class="ctop">Doopliss</span>
+              <strong class="ctitle">Hate Fuck Hotline</strong>
+              <span class="cnote">dial tone pop</span>
+            </div>
+            <div class="album-body">
+              <h3>Hate Fuck Hotline</h3>
+              <p>A feral dispatch from the Doopliss emergency broadcast system. Dial in, regret it later, and don't pretend you weren't warned by the title.</p>
+              <a class="suno-link" href="https://suno.com/playlist/1814f23d-b0e5-4de8-a902-bbf987783955" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-wave-square"></i> Listen on Suno</a>
+              <div class="tags"><span>unhinged</span><span>dial tone pop</span></div>
+            </div>
+          </article>
+
+          <article class="album">
+            <div class="album-cover c-guilty">
+              <span class="ctop">Doopliss</span>
+              <strong class="ctitle">Pretty Guilty</strong>
+              <span class="cnote">12 songs</span>
+            </div>
+            <div class="album-body">
+              <h3>Pretty Guilty</h3>
+              <p>The one where the verdict was never in question but the sentencing keeps getting delayed. Gorgeous on the surface, rotting underneath, and completely okay with it.</p>
+              <a class="suno-link" href="https://suno.com/playlist/f9d518b5-9752-46e4-a533-ffd49446e92a" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-wave-square"></i> Listen on Suno</a>
+              <div class="tags"><span>glamour rot</span><span>verdict pop</span><span>confessional</span></div>
+            </div>
+          </article>
+
+          <article class="album">
+            <div class="album-embed"><iframe src="https://www.youtube.com/embed/yUnQ6XG6mzE" title="Bite Marks &amp; Bubblegum" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>
+            <div class="album-body">
+              <h3>Bite Marks &amp; Bubblegum</h3>
+              <p>The one that smiles with perfect lipstick while the floor drops out underneath you. Glossy hooks, bruised undertones, and the exact second attraction starts looking like self-destruction.</p>
+              <div class="tags"><span>neon hooks</span><span>obsession</span><span>pretty damage</span></div>
+            </div>
+          </article>
+
+          <article class="album">
+            <div class="album-embed"><iframe src="https://www.youtube.com/embed/ByeMWC_DpcU" title="Death Threats &amp; Makeup Sex" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>
+            <div class="album-body">
+              <h3>Death Threats &amp; Makeup Sex</h3>
+              <p>The big one. Twenty-eight tracks of the entire toxic cycle on repeat — the fight, the fuck, the apology, the amnesia, the relapse. The album that proves love and destruction share a zip code.</p>
+              <div class="tags"><span>toxic loop</span><span>emotional arson</span><span>28 tracks deep</span></div>
+            </div>
+          </article>
+
+          <article class="album">
+            <div class="album-embed"><iframe src="https://www.youtube.com/embed/QzVcPeFDiAc" title="Cherry Lipstick (And Other Red Flags)" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>
+            <div class="album-body">
+              <h3>Cherry Lipstick (And Other Red Flags)</h3>
+              <p>A glittering field guide to attraction, denial, and knowing better about five seconds too late. Romantic comedy energy with a switchblade hidden somewhere in the purse.</p>
+              <div class="tags"><span>red flag pop</span><span>dark wit</span><span>catchy chaos</span></div>
+            </div>
+          </article>
+        </div>
+
+        <div class="links-band">
+          <a class="button cyan" href="https://suno.com/@doopliss" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-wave-square"></i> Full Suno profile</a>
+          <a class="button" href="https://www.tiktok.com/@duplighost" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-tiktok"></i> TikTok</a>
+          <a class="button" href="/"><i class="fa-solid fa-house"></i> Back to Qualiacology</a>
+        </div>
+      </div>
+    </section>
   </main>
-  <script>location.replace("/#music");</script>
+
+  <footer>
+    <div class="wrap">
+      <p>Doopliss is the music wing of <a href="/" style="color:var(--candy);font-weight:700">Qualiacology</a> — bright hooks, murder-pop gloss, and emotionally catastrophic subtext.</p>
+    </div>
+  </footer>
 </body>
 </html>
