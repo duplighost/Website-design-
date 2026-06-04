@@ -516,6 +516,14 @@
       overflow-wrap: anywhere;
     }
 
+    /* On phones the tagline wraps to a second line and collides with the
+       hero eyebrow under the fixed nav — hide it; the wordmark stands alone. */
+    @media (max-width: 600px) {
+      .brand-sub {
+        display: none;
+      }
+    }
+
     @media (max-width: 420px) {
       .brand-sub {
         font-size: 0.66rem;

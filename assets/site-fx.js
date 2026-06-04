@@ -125,6 +125,9 @@
      reading the page into going somewhere lower than where you started.
      ---------------------------------------------------------------------- */
   function scrollDescent() {
+    // On touch devices the descent layer is hidden (see CSS), and updating a
+    // scroll-linked variable every frame just forces repaints — skip it.
+    if (coarsePointer.matches) return;
     let queued = false;
     const update = () => {
       const max = document.documentElement.scrollHeight - window.innerHeight;
@@ -217,6 +220,10 @@
     const hero = document.querySelector('.hero');
     const visuals = hero && hero.querySelector('.hero-visuals');
     if (!hero || !visuals) return;
+
+    // The hero field is a per-frame canvas; on touch devices it costs battery
+    // and can jank the first screen of scrolling. The static orbs stay behind.
+    if (coarsePointer.matches) return;
 
     const canvas = document.createElement('canvas');
     canvas.className = 'hero-field';

@@ -320,3 +320,18 @@ h2.gradient-text {
   .hero-field { transition: none; }
   .fx-pointer-glow { transition: none; }
 }
+
+/* --------------------------------------------------------------------------
+   Touch / coarse-pointer devices: strip the expensive parts so scrolling
+   stays smooth. Fixed full-screen layers with mix-blend-mode repaint the
+   whole viewport on every scroll frame on mobile — and the pointer glow is
+   pure overhead with no pointer. Keep a static, blend-free grain for texture.
+   -------------------------------------------------------------------------- */
+@media (hover: none), (pointer: coarse) {
+  .fx-pointer-glow { display: none; }
+  .fx-descent { display: none; }
+  .fx-grain {
+    mix-blend-mode: normal;
+    opacity: 0.03;
+  }
+}
