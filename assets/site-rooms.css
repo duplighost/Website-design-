@@ -170,6 +170,20 @@ body[data-mood="book"]::after {
 .book-door    { --door-glow: rgba(255,210,122,0.38); }
 
 /* --------------------------------------------------------------------------
+   Doopliss teaser — three highlights on the hub that funnel into the room.
+   -------------------------------------------------------------------------- */
+.doopliss-teaser {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.1rem;
+  margin-top: 1.6rem;
+}
+.doopliss-teaser .album-card { display: block; }
+@media (max-width: 860px) {
+  .doopliss-teaser { grid-template-columns: 1fr; }
+}
+
+/* --------------------------------------------------------------------------
    Toy cards — an arcade shelf. A light-sweep on hover, art drifts/zooms.
    -------------------------------------------------------------------------- */
 .toy-card { position: relative; }

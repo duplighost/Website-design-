@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Psychopharmacology</title>
-  <meta name="description" content="Mechanism, evidence, clinical reality, and the chemistry of subjective experience." />
+  <title>Psychopharmacology — the signal board</title>
+  <meta name="description" content="Mechanism, evidence, and clinical reality without the folklore. MAOIs, serotonin toxicity, treatment resistance, and where bad claims come to die." />
+  <meta name="theme-color" content="#05080f" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Psychopharmacology" />
   <meta property="og:description" content="Mechanism, evidence, clinical reality, and the chemistry of subjective experience." />
@@ -21,23 +22,220 @@
   <meta name="twitter:image:alt" content="Psychopharmacology preview image" />
   <link rel="canonical" href="https://qualiacology.com/psychopharmacology/" />
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+  <link rel="apple-touch-icon" href="/assets/icon-192.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
   <style>
-    :root { color-scheme: dark; }
-    body { margin:0; min-height:100vh; display:grid; place-items:center; font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background:radial-gradient(circle at 20% 10%,rgba(255,94,173,.18),transparent 30%),radial-gradient(circle at 80% 20%,rgba(105,226,255,.14),transparent 28%),linear-gradient(180deg,#07070d,#13172b); color:#f7f4ff; }
-    main { width:min(760px,calc(100vw - 40px)); padding:38px; border:1px solid rgba(255,255,255,.13); border-radius:28px; background:rgba(12,15,30,.78); box-shadow:0 28px 80px rgba(0,0,0,.38); }
-    p.kicker { color:#a6f0ff; text-transform:uppercase; letter-spacing:.18em; font-size:.78rem; font-weight:800; margin:0 0 10px; }
-    h1 { font-size:clamp(2.4rem,7vw,4.4rem); line-height:.95; margin:.1em 0 .22em; }
-    p { color:#d8d4e8; font-size:1.08rem; line-height:1.65; }
-    a { color:#69e2ff; font-weight:800; }
+    :root {
+      /* Shared tokens so the FX engine resolves */
+      --bg-0:#05080f; --bg-1:#0a1020; --bg-2:#0b1424;
+      --text:#eef4fb; --muted:#9fb3c8; --muted-strong:#6f86a0;
+      --line:rgba(255,255,255,0.1); --line-strong:rgba(255,255,255,0.18);
+      --pink:#ff5ead; --pink-soft:#ff8fc8; --violet:#8f72ff; --violet-soft:#b8a7ff;
+      --cyan:#69e2ff; --cyan-soft:#a6f0ff; --mint:#70f3cf; --gold:#ffd27a; --gold-soft:#ffe3ae;
+      --danger:#ff6d86; --radius:28px; --radius-sm:18px; --container:1120px;
+      --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+      --transition:200ms ease;
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; overflow-x:clip; }
+    body {
+      margin:0; min-height:100vh; line-height:1.6; overflow-x:hidden;
+      font-family:"Inter",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; color:var(--text);
+      background:
+        radial-gradient(circle at 12% 6%, rgba(105,226,255,0.16), transparent 30%),
+        radial-gradient(circle at 88% 10%, rgba(112,243,207,0.1), transparent 26%),
+        radial-gradient(circle at 60% 92%, rgba(143,114,255,0.12), transparent 32%),
+        linear-gradient(180deg,#05080f 0%, #081020 44%, #0a1322 100%);
+    }
+    /* blueprint grid */
+    body::before {
+      content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+      background-image:
+        linear-gradient(rgba(105,226,255,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(105,226,255,0.05) 1px, transparent 1px);
+      background-size:48px 48px;
+      mask-image:radial-gradient(circle at 50% 28%, rgba(0,0,0,0.8), transparent 78%);
+      opacity:0.6;
+    }
+    img { display:block; max-width:100%; }
+    a { color:inherit; text-decoration:none; }
+    ::selection { background:rgba(105,226,255,0.35); color:#fff; }
+    .wrap { width:min(var(--container), calc(100vw - 2.4rem)); margin-inline:auto; position:relative; z-index:1; }
+
+    /* topbar */
+    .topbar { position:sticky; top:0; z-index:120; backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); background:linear-gradient(180deg, rgba(5,8,15,0.85), rgba(5,8,15,0.4)); border-bottom:1px solid rgba(105,226,255,0.14); }
+    .topbar .wrap { display:flex; align-items:center; justify-content:space-between; gap:1rem; height:62px; }
+    .back-link { display:inline-flex; align-items:center; gap:0.55rem; color:var(--muted); font-weight:600; font-size:0.92rem; transition:color var(--transition); }
+    .back-link:hover { color:var(--text); }
+    .topbar .mark { font-family:var(--mono); font-weight:600; letter-spacing:0.02em; color:var(--cyan-soft); font-size:0.92rem; }
+    .topbar .links a { width:2.3rem; height:2.3rem; display:grid; place-items:center; border-radius:999px; border:1px solid rgba(105,226,255,0.2); color:var(--cyan-soft); transition:all var(--transition); }
+    .topbar .links a:hover { background:rgba(105,226,255,0.14); transform:translateY(-2px); }
+
+    /* hero */
+    .hero { padding:clamp(2.8rem,8vw,5.5rem) 0 clamp(1.6rem,4vw,2.6rem); }
+    .status { display:inline-flex; align-items:center; gap:0.55rem; font-family:var(--mono); font-size:0.74rem; letter-spacing:0.1em; color:var(--cyan-soft); border:1px solid rgba(105,226,255,0.24); background:rgba(105,226,255,0.06); padding:0.4rem 0.8rem; border-radius:8px; }
+    .status .dot { width:0.55rem; height:0.55rem; border-radius:50%; background:var(--mint); box-shadow:0 0 10px var(--mint); animation:pulse 2s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
+    .hero h1 { font-family:"Space Grotesk",sans-serif; font-weight:700; font-size:clamp(2.6rem,8vw,5.2rem); line-height:0.92; letter-spacing:-0.03em; margin:1.2rem 0 0;
+      background:linear-gradient(120deg,#a6f0ff 0%, #69e2ff 35%, #70f3cf 70%, #b8a7ff 100%); background-size:200% 200%; -webkit-background-clip:text; background-clip:text; color:transparent; filter:drop-shadow(0 0 30px rgba(105,226,255,0.28)); }
+    .hero .tagline { font-family:"Space Grotesk",sans-serif; font-size:clamp(1.2rem,3vw,1.7rem); color:var(--cyan-soft); margin:1.1rem 0 0; max-width:30rem; }
+    .hero .sub { color:var(--muted); margin:0.8rem 0 0; max-width:44rem; }
+
+    /* section scaffolding */
+    .section { padding:clamp(2rem,5vw,3.4rem) 0; position:relative; z-index:1; }
+    .eyebrow { font-family:var(--mono); color:var(--cyan-soft); text-transform:uppercase; letter-spacing:0.16em; font-size:0.74rem; margin:0 0 0.5rem; }
+    .h2 { font-family:"Space Grotesk",sans-serif; font-size:clamp(1.7rem,4vw,2.4rem); margin:0; letter-spacing:-0.02em; }
+    .lead { color:var(--muted); max-width:48rem; margin:0.6rem 0 0; }
+
+    /* signal board */
+    .signal-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1rem; margin-top:1.7rem; }
+    .signal {
+      position:relative; display:flex; flex-direction:column; gap:0.6rem;
+      padding:1.3rem 1.3rem 1.2rem; border-radius:16px;
+      border:1px solid rgba(255,255,255,0.09); border-left:3px solid var(--accent,var(--cyan));
+      background:linear-gradient(160deg, rgba(13,22,40,0.9), rgba(8,14,26,0.92));
+      box-shadow:0 16px 44px rgba(0,0,0,0.28); transition:transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+    }
+    .signal:hover { transform:translateY(-4px); border-left-color:var(--accent,var(--cyan)); box-shadow:0 26px 64px rgba(0,0,0,0.4), -3px 0 24px -8px var(--accent,var(--cyan)); }
+    .signal .cat { font-family:var(--mono); font-size:0.66rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent,var(--cyan)); display:inline-flex; align-items:center; gap:0.4rem; }
+    .signal h3 { font-family:"Space Grotesk",sans-serif; font-size:1.18rem; margin:0; letter-spacing:-0.01em; }
+    .signal p { color:var(--muted); font-size:0.92rem; margin:0; line-height:1.55; flex:1; }
+    .signal .act { font-size:0.85rem; font-weight:700; color:var(--accent,var(--cyan)); display:inline-flex; align-items:center; gap:0.4rem; margin-top:0.3rem; }
+    .signal.note { --accent:var(--cyan); }
+    .signal.ask  { --accent:var(--mint); }
+    .signal.read { --accent:var(--violet-soft); }
+    .signal.myth { --accent:var(--danger); }
+
+    /* convergence */
+    .converge { margin-top:1.7rem; padding:clamp(1.5rem,4vw,2.2rem); border-radius:20px; border:1px solid rgba(255,255,255,0.1); background:linear-gradient(160deg, rgba(13,22,40,0.82), rgba(8,14,26,0.9)); }
+    .axes { display:flex; flex-wrap:wrap; gap:0.55rem; margin:0 0 1.1rem; }
+    .axis { font-family:var(--mono); font-size:0.74rem; padding:0.35rem 0.7rem; border-radius:999px; border:1px solid rgba(105,226,255,0.22); color:var(--cyan-soft); background:rgba(105,226,255,0.05); }
+    .axis .arrow { color:var(--muted-strong); margin-left:0.4rem; }
+    .converge p { color:var(--muted); margin:0; max-width:52rem; }
+    .converge .fit { color:var(--mint); font-weight:700; font-family:"Space Grotesk",sans-serif; font-size:1.15rem; display:block; margin-top:0.6rem; }
+
+    /* cta + footer */
+    .links-band { display:flex; flex-wrap:wrap; gap:0.8rem; margin-top:1.8rem; }
+    .button { display:inline-flex; align-items:center; gap:0.55rem; padding:0.8rem 1.4rem; border-radius:999px; font-weight:700; border:1px solid rgba(105,226,255,0.26); color:var(--text); background:rgba(105,226,255,0.08); transition:all var(--transition); }
+    .button:hover { transform:translateY(-2px); background:rgba(105,226,255,0.16); box-shadow:0 16px 40px rgba(105,226,255,0.2); }
+    .button.solid { color:#04212b; background:linear-gradient(120deg,var(--cyan),var(--mint)); border-color:transparent; }
+    footer { padding:3rem 0 4rem; text-align:center; position:relative; z-index:1; border-top:1px solid rgba(105,226,255,0.12); margin-top:2rem; }
+    footer p { color:var(--muted-strong); font-size:0.88rem; }
+
+    @media (max-width:900px) { .signal-grid { grid-template-columns:1fr 1fr; } }
+    @media (max-width:600px) { .signal-grid { grid-template-columns:1fr; } .topbar .mark { display:none; } }
+    @media (hover:none),(pointer:coarse) { body::before { opacity:0.4; } .topbar { backdrop-filter:none; -webkit-backdrop-filter:none; background:rgba(5,8,15,0.94); } }
+    @media (prefers-reduced-motion:reduce) { .status .dot { animation:none; } }
   </style>
+
+  <link rel="stylesheet" href="/assets/site-ambient.css" />
+  <link rel="stylesheet" href="/assets/site-fx.css" />
+  <script src="/assets/site-ambient.js" defer></script>
+  <script src="/assets/site-fx.js" defer></script>
 </head>
 <body>
+  <header class="topbar">
+    <div class="wrap">
+      <a class="back-link" href="/"><i class="fa-solid fa-arrow-left-long"></i> Qualiacology</a>
+      <span class="mark">/ psychopharmacology</span>
+      <div class="links">
+        <a href="https://discord.gg/NwvxKxUJpC" target="_blank" rel="noopener noreferrer" aria-label="Discord"><i class="fa-brands fa-discord"></i></a>
+      </div>
+    </div>
+  </header>
+
   <main>
-    <p class="kicker">Science</p>
-    <h1>Psychopharmacology</h1>
-    <p>Mechanism, evidence, clinical reality, and the chemistry of subjective experience.</p>
-    <p><a href="/#about">Continue to this section</a></p>
+    <section class="hero">
+      <div class="wrap">
+        <span class="status"><span class="dot" aria-hidden="true"></span> signal board // where bad claims come to die</span>
+        <h1>Psychopharmacology</h1>
+        <p class="tagline">Medication folklore dies here.</p>
+        <p class="sub">Mechanism, evidence, and clinical reality — held against each other until something true falls out. No brochure language, no one-magic-answer promises, no pretending the hard parts are simple. Just the chemistry of being alive, read carefully.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <p class="eyebrow">// the board</p>
+        <h2 class="h2">Signal, not sludge</h2>
+        <p class="lead">A standing set of questions we keep returning to. Some are field notes, some are open invitations to argue it out with 3,000 people who actually read the papers.</p>
+
+        <div class="signal-grid">
+          <article class="signal note">
+            <span class="cat"><i class="fa-solid fa-flask-vial"></i> field note</span>
+            <h3>MAOIs</h3>
+            <p>The most unfairly buried class in psychiatry. We separate the genuine dietary and drug interactions from decades of inherited fear — and keep asking why the option that works keeps getting skipped.</p>
+          </article>
+
+          <article class="signal note">
+            <span class="cat"><i class="fa-solid fa-wave-square"></i> field note</span>
+            <h3>Serotonin toxicity</h3>
+            <p>A dose-dependent spectrum, not a one-touch catastrophe. Which combinations actually carry risk, which are folklore, and how to tell them apart under real-world conditions.</p>
+          </article>
+
+          <article class="signal ask">
+            <span class="cat"><i class="fa-solid fa-comments"></i> ask the community</span>
+            <h3>Treatment resistance</h3>
+            <p>Often a label for "we stopped looking." Sequencing, mechanism-matching, and the options written off too early. Bring a case; we'll reason through it together.</p>
+            <a class="act" href="https://discord.gg/NwvxKxUJpC" target="_blank" rel="noopener noreferrer">Take it to Discord <i class="fa-solid fa-arrow-right"></i></a>
+          </article>
+
+          <article class="signal myth">
+            <span class="cat"><i class="fa-solid fa-triangle-exclamation"></i> field note</span>
+            <h3>Medication myths</h3>
+            <p>The confident, the repeated, and the wrong — held up against mechanism and evidence until they stop holding. This is the part of the room where bad claims come to die.</p>
+          </article>
+
+          <article class="signal read">
+            <span class="cat"><i class="fa-solid fa-layer-group"></i> read</span>
+            <h3>Evidence hierarchy</h3>
+            <p>Mechanism, trials, expert pattern, prescriber reality, patient experience. The truth isn't any single tier — it's where they converge. The book lays out the whole framework.</p>
+            <a class="act" href="/book.html#the-framework-how-we-know-what-works">Read the framework <i class="fa-solid fa-arrow-right"></i></a>
+          </article>
+
+          <article class="signal ask">
+            <span class="cat"><i class="fa-solid fa-scale-balanced"></i> ask the community</span>
+            <h3>Practical risk interpretation</h3>
+            <p>The gap between a scary-sounding interaction and an actually dangerous one. Reading a risk like a clinician instead of a warning label.</p>
+            <a class="act" href="https://discord.gg/NwvxKxUJpC" target="_blank" rel="noopener noreferrer">Take it to Discord <i class="fa-solid fa-arrow-right"></i></a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <p class="eyebrow">// the method</p>
+        <h2 class="h2">Convergence, not authority</h2>
+        <div class="converge">
+          <div class="axes">
+            <span class="axis">mechanism <span class="arrow">→</span></span>
+            <span class="axis">trials <span class="arrow">→</span></span>
+            <span class="axis">experts <span class="arrow">→</span></span>
+            <span class="axis">prescribers <span class="arrow">→</span></span>
+            <span class="axis">patients</span>
+          </div>
+          <p>Mechanism explains what should happen. Trials show what can happen under controlled conditions. Experts recognize patterns. Prescribers see what survives real life. Patients reveal whether the result is actually livable. No single one of them gets the last word.</p>
+          <span class="fit">The truth is the fit.</span>
+        </div>
+
+        <div class="links-band">
+          <a class="button solid" href="https://discord.gg/NwvxKxUJpC" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-discord"></i> Join the community</a>
+          <a class="button" href="/book.html"><i class="fa-solid fa-book-open"></i> Read the book</a>
+          <a class="button" href="/"><i class="fa-solid fa-house"></i> Back to Qualiacology</a>
+        </div>
+      </div>
+    </section>
   </main>
-  <script>location.replace("/#about");</script>
+
+  <footer>
+    <div class="wrap">
+      <p>Psychopharmacology is the research wing of <a href="/" style="color:var(--cyan-soft);font-weight:700">Qualiacology</a> — mechanism, evidence, and clinical reality without the folklore.</p>
+    </div>
+  </footer>
 </body>
 </html>
