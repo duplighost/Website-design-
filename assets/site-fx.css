@@ -288,6 +288,13 @@ h2.gradient-text {
   color: transparent;
 }
 .fx-secret-card p { color: var(--muted); margin: 0 auto 1.4rem; max-width: 26rem; }
+.fx-secret-card .fx-secret-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  justify-content: center;
+  align-items: center;
+}
 .fx-secret-card .fx-secret-close {
   display: inline-flex;
   align-items: center;

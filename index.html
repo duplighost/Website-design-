@@ -6,7 +6,7 @@
   <title>Qualiacology | Alexander Duncan Guitar</title>
   <meta
     name="description"
-    content="Qualiacology is Alexander Duncan Guitar's home for psychopharmacology, community, Doopliss music, books, and No Moon — a luminous browser roguelike about strange Passengers descending beneath a missing sky."
+    content="Qualiacology is Alexander Duncan Guitar's home for mechanisms of feeling: psychopharmacology, community, Doopliss music, books, little browser toys, and No Moon."
   />
   <meta name="theme-color" content="#0d1020" />
   <meta name="robots" content="index, follow" />
@@ -2240,6 +2240,7 @@
   </style>
   <link rel="stylesheet" href="/assets/site-ambient.css" />
   <link rel="stylesheet" href="/assets/site-fx.css" />
+  <link rel="stylesheet" href="/assets/site-rooms.css" />
   <script src="/assets/site-ambient.js" defer></script>
   <script src="/assets/site-fx.js" defer></script>
 </head>
@@ -2251,7 +2252,7 @@
     <div class="container nav-inner">
       <a href="#home" class="brand" aria-label="Qualiacology home">
         <span class="brand-mark">Qualiacology</span>
-        <span class="brand-sub">mechanisms of feeling / art / community</span>
+        <span class="brand-sub">mechanisms of feeling / songs / games / community</span>
       </a>
 
       <div class="nav-controls">
@@ -2321,6 +2322,13 @@
               <span class="chip"><i class="fa-brands fa-discord"></i> 3,000+ member community</span>
             </div>
 
+            <div class="current-signal" aria-label="Current projects">
+              <span class="signal-label">currently</span>
+              <strong>building No Moon</strong>
+              <span>making little toys</span>
+              <span>writing glossy emotional damage</span>
+            </div>
+
             <div class="button-row">
               <a class="button cyan" href="https://discord.gg/NwvxKxUJpC" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-discord"></i> Join the Community</a>
               <a class="button" href="/no-moon/"><i class="fa-solid fa-gamepad"></i> Play No Moon</a>
@@ -2335,26 +2343,26 @@
                   <div class="map-core">
                     <span class="mini">qualiacology</span>
                     <strong>QUALIA</strong>
-                    <p>The chemistry of subjective experience, traced through mechanism, music, and real human mess.</p>
+                    <p>Mechanisms of feeling, traced through evidence, music, and real human mess.</p>
                   </div>
                 </div>
 
-                <article class="map-node science">
+                <article class="map-node science" data-mood="science">
                   <h3>Psychopharmacology</h3>
                   <p>Convergence-based reasoning around MAOIs, serotonin toxicity, and the difference between what works on paper and what works in people.</p>
                 </article>
 
-                <article class="map-node music">
+                <article class="map-node music" data-mood="music">
                   <h3>Doopliss</h3>
                   <p>Bright melodies, dark subtext, and pop songs that smile sweetly right before they bite.</p>
                 </article>
 
-                <article class="map-node community">
+                <article class="map-node community" data-mood="community">
                   <h3>Discord</h3>
                   <p>We study medication, help people, and chill with friends. 3,000+ members strong.</p>
                 </article>
 
-                <article class="map-node book">
+                <article class="map-node book" data-mood="book">
                   <h3>This Helped Someone</h3>
                   <p>A puzzle-piece framework for finding what actually fits in psychiatric medicine — without pretending there’s one magic answer.</p>
                 </article>
@@ -2367,9 +2375,32 @@
             </div>
           </div>
         </div>
+
+        <div class="container door-deck reveal" aria-label="Main rooms">
+          <a class="door-card science-door" data-mood="science" href="#community">
+            <span class="door-number">01</span>
+            <strong>Psychopharmacology</strong>
+            <span>Medication folklore dies here. Evidence, mechanism, lived practice, signal.</span>
+          </a>
+          <a class="door-card game-door" data-mood="game" href="/no-moon/">
+            <span class="door-number">02</span>
+            <strong>No Moon</strong>
+            <span>Playable browser descent. Strange passengers. Sealed rooms. Bad sky.</span>
+          </a>
+          <a class="door-card music-door" data-mood="music" href="#music">
+            <span class="door-number">03</span>
+            <strong>Doopliss</strong>
+            <span>Sweet hooks, ugly subtext, murder pop polished until it reflects badly on everyone.</span>
+          </a>
+          <a class="door-card book-door" data-mood="book" href="book.html">
+            <span class="door-number">04</span>
+            <strong>This Helped Someone</strong>
+            <span>A practical framework for thinking clearly when psychiatry gets personal.</span>
+          </a>
+        </div>
       </section>
 
-      
+
 
       <section class="section" id="community">
         <span class="section-glow cyan" style="width: 22rem; height: 22rem; right: -7rem; top: 3rem;" aria-hidden="true"></span>
@@ -2386,7 +2417,7 @@
           <div class="community-layout">
             <article class="community-copy card cool reveal">
               <p>
-                At the heart of our community, we explore the intricacies of medications — delving deep into how they actually work in the brain and in real life. We commit to supporting each other through the hard parts. And we cherish the friendships that form when people stop pretending and start being honest about what they’re going through.
+                At the heart of our community, we get past medication folklore and into what actually happens — mechanism, risk, response, tradeoffs, and real life. We commit to supporting each other through the hard parts. And we cherish the friendships that form when people stop pretending and start being honest about what they’re going through.
               </p>
               <p>
                 Hard questions are welcome — interactions, side effects, MAOI confusion, tapering, serotonin toxicity fears, and the general mess of trying to make good decisions when the internet is full of confident bullshit. The vibe is serious without being sterile, and friendly without being fake.
@@ -2524,10 +2555,10 @@
           <div class="section-header reveal">
             <p class="eyebrow">Toys</p>
             <h2>Little Toys</h2>
-            <p class="lead">Tiny things to wander into for a minute — no scores, no goals, just play. Made for the joy of it.</p>
+            <p class="lead">Tiny things to wander into for a minute — no homework, no scoreboard, no sweaty little achievement treadmill. Just play.</p>
           </div>
           <div class="toys-grid">
-            <article class="card cool reveal toy-card">
+            <article class="card cool reveal toy-card" data-mood="game">
               <div class="toy-art"><img class="k-glide" src="assets/toy-glide.jpg" alt="Glide — a tiny flying squirrel in a sunlit forest" loading="lazy"></div>
               <div class="toy-body">
                 <h3>Glide</h3>
@@ -2535,7 +2566,7 @@
                 <a class="button" href="/glide/"><i class="fa-solid fa-feather"></i> Play Glide</a>
               </div>
             </article>
-            <article class="card cool reveal toy-card">
+            <article class="card cool reveal toy-card" data-mood="toy">
               <div class="toy-art"><img class="k-luma" src="assets/toy-luma.jpg" alt="LUMA — a living field of light" loading="lazy"></div>
               <div class="toy-body">
                 <h3>LUMA</h3>
@@ -2750,6 +2781,12 @@
                 </div>
               </div>
 
+              <div class="book-entry-grid" aria-label="Book entry points">
+                <a href="book.html#introduction-the-question-that-started-e"><strong>I’m overwhelmed</strong><span>Start with the question.</span></a>
+                <a href="book.html#the-framework-how-we-know-what-works"><strong>I’m trying to understand meds</strong><span>Use the evidence map.</span></a>
+                <a href="book.html#supporting-others-a-guide-for-family-and"><strong>I’m helping someone else</strong><span>Go straight to support.</span></a>
+              </div>
+
               <div class="button-row" style="margin-top: 1.8rem;">
                 <a class="button gold" href="book.html"><i class="fa-solid fa-book-open"></i> Read the Full Book</a>
               </div>
@@ -2807,7 +2844,7 @@
               </p>
 
               <div class="quote">
-                “Science for the chemistry. Music for the feeling. Community for the parts nobody should do alone.”
+                “Science for the mechanism. Music for the feeling. Community for the parts nobody should do alone.”
               </div>
 
               <div class="chips">
@@ -2840,7 +2877,7 @@
                 If you’re here for the psychopharmacology work, the Discord is the fastest way into the community. If you’re here for the music, Suno and TikTok are where the Doopliss side gets loud. If you just want to say hi like a normal person, shoot me an email or hit my Instagram DMs.
               </p>
               <p>
-                Qualiacology is meant to be a central hub, not a maze. Pick the door that matches the version of me you were looking for.
+                Qualiacology is one crooked little house for the work, the songs, the games, and the people. Pick the door that matches the version of me you were looking for.
               </p>
 
               <div class="button-row">
@@ -2986,7 +3023,7 @@
 
           <footer class="footer-bottom">
             <div><strong>© 2026 Qualiacology</strong></div>
-            <div>The chemistry of being alive, examined with signal, style, and a little neon damage.</div>
+            <div>Mechanisms of feeling, examined with signal, style, and a little neon damage.</div>
           </footer>
         </div>
       </section>

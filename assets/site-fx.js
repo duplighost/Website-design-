@@ -36,6 +36,7 @@
     safe('hero-field', heroField);
     safe('audio-reactive', audioReactive);
     safe('easter-egg', easterEgg);
+    safe('rooms-mood', roomsMood);
 
     if (window.console && console.log) {
       console.log(
@@ -392,6 +393,35 @@
   }
 
   /* ----------------------------------------------------------------------
+     8. Mood-reactive rooms — hovering a node, door, or toy retints the whole
+     page to that world (via body[data-mood]). Pairs with site-rooms.css.
+     ---------------------------------------------------------------------- */
+  function roomsMood() {
+    const targets = Array.from(document.querySelectorAll('[data-mood]'));
+    if (!targets.length) return;
+    let clearTimer = 0;
+
+    const set = (mood) => {
+      window.clearTimeout(clearTimer);
+      if (mood) document.body.dataset.mood = mood;
+    };
+    const clear = () => {
+      // Small delay so moving between adjacent doors doesn't flicker the wash.
+      window.clearTimeout(clearTimer);
+      clearTimer = window.setTimeout(() => { delete document.body.dataset.mood; }, 120);
+    };
+
+    targets.forEach((item) => {
+      const mood = item.getAttribute('data-mood');
+      if (!mood) return;
+      item.addEventListener('pointerenter', () => set(mood));
+      item.addEventListener('pointerleave', clear);
+      item.addEventListener('focusin', () => set(mood));
+      item.addEventListener('focusout', clear);
+    });
+  }
+
+  /* ----------------------------------------------------------------------
      7. Easter egg — type "i seent it" anywhere, or long-press the QUALIA core,
      and a small trapdoor opens. Tasteful, on-brand, easy to close.
      ---------------------------------------------------------------------- */
@@ -404,10 +434,14 @@
     overlay.innerHTML =
       '<div class="fx-secret-card" role="document">' +
         '<p class="eyebrow">a wrong door</p>' +
-        '<h3>Boon Moots</h3>' +
-        '<p>You went looking, and the dungeon admitted one room it pretends it did not build. ' +
-        'Nothing to win here. Just proof the house has corners the map doesn’t.</p>' +
-        '<button type="button" class="fx-secret-close">close the door</button>' +
+        '<h3>I seent it.</h3>' +
+        '<p>The sky is missing. The site noticed. You went looking, and the house ' +
+        'admitted one room the map pretends it did not build. Nothing to win here — ' +
+        'just a corner that opens when the visitor says the wrong true thing.</p>' +
+        '<div class="fx-secret-actions">' +
+          '<a class="button cyan" href="/no-moon/"><i class="fa-solid fa-gamepad"></i> Start Descent</a>' +
+          '<button type="button" class="fx-secret-close">close the door</button>' +
+        '</div>' +
       '</div>';
     document.body.appendChild(overlay);
 
