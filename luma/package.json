@@ -1,0 +1,16 @@
+{
+  "name": "luma-visualizer",
+  "version": "1.0.0",
+  "description": "LUMA — a living, music- and touch-reactive WebGL2 visualizer. Mobile-first, zero-dependency runtime, deploys as a static site.",
+  "keywords": ["visualizer", "webgl2", "audio", "music", "generative", "shader", "glsl", "mobile"],
+  "license": "MIT",
+  "scripts": {
+    "start": "python3 -m http.server 8080",
+    "serve": "python3 -m http.server 8080",
+    "test": "node test/smoke.js",
+    "test:strobe": "node test/strobe.js"
+  },
+  "devDependencies": {
+    "puppeteer": "^25.1.0"
+  }
+}

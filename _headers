@@ -1,0 +1,32 @@
+/no-moon/index.html
+  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+
+/no-moon/game_inline.js
+  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+
+/no-moon/no-moon-sw.js
+  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+
+/no-moon-sw.js
+  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+
+/clear.html
+  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+
+/_headers
+  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+/no-moon/
+  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+
+/no-moon/*
+  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+
+
+/assets/og/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/audio/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/site-ambient.*
+  Cache-Control: public, max-age=31536000, immutable

@@ -1,0 +1,25 @@
+# LUMA is a static site — no build step. Serve the repo root as-is.
+[build]
+  publish = "."
+  command = ""
+
+# Long-cache the immutable-ish assets; keep HTML/SW fresh.
+[[headers]]
+  for = "/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "no-cache"
