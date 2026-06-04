@@ -57,7 +57,7 @@
    -------------------------------------------------------------------------- */
 .fx-grain {
   position: fixed;
-  inset: -50%;
+  inset: 0;
   z-index: 9000;
   pointer-events: none;
   opacity: calc(0.05 + var(--scroll-depth) * 0.035);
