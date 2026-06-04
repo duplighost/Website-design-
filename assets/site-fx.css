@@ -1,0 +1,315 @@
+/* ==========================================================================
+   site-fx.css — the haunted layer
+   Additive, progressively-enhanced effects that sit on top of the existing
+   design system. Everything here degrades gracefully: if site-fx.js never
+   runs, none of these layers appear, and the site looks exactly as before.
+   ========================================================================== */
+
+:root {
+  --mx: 50%;          /* pointer X as viewport % (big ambient glow)      */
+  --my: 38%;          /* pointer Y as viewport %                          */
+  --cx: 50vw;         /* cursor X in px (bloom dot)                       */
+  --cy: 50vh;         /* cursor Y in px                                   */
+  --scroll-depth: 0;  /* 0 at top of page → 1 at the footer (the descent) */
+  --audio-energy: 0;  /* 0 silent → ~1 loud; driven by the ambient track  */
+}
+
+/* --------------------------------------------------------------------------
+   1. Pointer-reactive ambient glow — the brightest point follows the cursor.
+   Lives in the background plane (z-index 0), behind all content (z-index 1).
+   -------------------------------------------------------------------------- */
+.fx-pointer-glow {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 600ms ease;
+  background:
+    radial-gradient(
+      26rem 26rem at var(--mx) var(--my),
+      rgba(143, 114, 255, 0.16),
+      rgba(105, 226, 255, 0.07) 38%,
+      transparent 62%
+    );
+  mix-blend-mode: screen;
+}
+.fx-ready .fx-pointer-glow { opacity: 1; }
+
+/* --------------------------------------------------------------------------
+   2. The descent — page darkens and closes in as you scroll toward the floor.
+   A vignette whose weight is driven by --scroll-depth. Subtle on purpose.
+   -------------------------------------------------------------------------- */
+.fx-descent {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: calc(var(--scroll-depth) * 0.9);
+  background:
+    radial-gradient(120% 90% at 50% -10%, transparent 52%, rgba(3, 3, 8, 0.55) 100%),
+    linear-gradient(180deg, transparent 40%, rgba(3, 3, 8, 0.32) 100%);
+}
+
+/* --------------------------------------------------------------------------
+   3. Film grain — the thin layer of unease. Sits above everything,
+   never intercepts input, ~5% opacity, blended into the image.
+   -------------------------------------------------------------------------- */
+.fx-grain {
+  position: fixed;
+  inset: -50%;
+  z-index: 9000;
+  pointer-events: none;
+  opacity: calc(0.05 + var(--scroll-depth) * 0.035);
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='150' height='150'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='150' height='150' filter='url(%23n)'/></svg>");
+  background-size: 150px 150px;
+}
+
+/* --------------------------------------------------------------------------
+   4. Bloom cursor — a soft dot of light that trails the pointer and brightens
+   over interactive elements. The native cursor is left intact underneath.
+   Pointer (fine) devices only; hidden on touch.
+   -------------------------------------------------------------------------- */
+.fx-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 22px;
+  height: 22px;
+  margin: -11px 0 0 -11px;
+  border-radius: 50%;
+  z-index: 9001;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(var(--cx), var(--cy));
+  transition: opacity 300ms ease, width 200ms ease, height 200ms ease;
+  background: radial-gradient(circle, rgba(182, 230, 255, 0.9), rgba(143, 114, 255, 0.35) 45%, transparent 70%);
+  mix-blend-mode: screen;
+  filter: blur(1px);
+  will-change: transform;
+}
+.fx-cursor.is-visible { opacity: 0.85; }
+.fx-cursor.is-hot {
+  width: 40px;
+  height: 40px;
+  background: radial-gradient(circle, rgba(255, 143, 200, 0.95), rgba(105, 226, 255, 0.4) 50%, transparent 72%);
+}
+
+@media (hover: none), (pointer: coarse) {
+  .fx-cursor { display: none; }
+}
+
+/* --------------------------------------------------------------------------
+   5. Wake the qualia map — real connecting filaments with a travelling pulse.
+   The inert nervous system finally fires. SVG is injected by site-fx.js.
+   -------------------------------------------------------------------------- */
+.qualia-map .map-grid { position: relative; }
+
+.qualia-links {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;          /* sits under the nodes (z-index 1) but over the card */
+  pointer-events: none;
+  overflow: visible;
+}
+.qualia-links .ql-base {
+  fill: none;
+  stroke: rgba(184, 167, 255, 0.18);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+}
+.qualia-links .ql-pulse {
+  fill: none;
+  stroke-width: 2.1;
+  stroke-linecap: round;
+  stroke-dasharray: 26 320;
+  filter: drop-shadow(0 0 5px currentColor);
+  animation: qlTravel 3.6s linear infinite;
+}
+.qualia-links .ql-pulse.l1 { color: var(--cyan);   animation-delay: 0s;    }
+.qualia-links .ql-pulse.l2 { color: var(--pink);   animation-delay: 0.9s;  }
+.qualia-links .ql-pulse.l3 { color: var(--mint);   animation-delay: 1.8s;  }
+.qualia-links .ql-pulse.l4 { color: var(--gold);   animation-delay: 2.7s;  }
+
+@keyframes qlTravel {
+  from { stroke-dashoffset: 346; }
+  to   { stroke-dashoffset: 0;   }
+}
+
+/* Hovering a node lights its own thread and dims the rest of the constellation */
+.qualia-map .map-grid.node-focus .ql-pulse { opacity: 0.18; }
+.qualia-map .map-grid.node-focus .ql-pulse.is-active { opacity: 1; }
+.qualia-map .map-grid.node-focus .ql-base { opacity: 0.4; }
+.qualia-map .map-grid.node-focus .ql-base.is-active { opacity: 1; stroke: rgba(255, 255, 255, 0.4); }
+
+.qualia-map .map-node {
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+  position: relative;
+  z-index: 1;
+}
+.qualia-map .map-node:hover {
+  transform: translateY(-3px);
+  border-color: rgba(184, 167, 255, 0.4);
+}
+
+/* --------------------------------------------------------------------------
+   6. Headline chromatic aberration — the ink didn't quite register.
+   drop-shadow works on the gradient-filled pixels of clip-text headlines.
+   -------------------------------------------------------------------------- */
+.hero-title {
+  filter:
+    drop-shadow(0 0 32px rgba(143, 114, 255, 0.32))
+    drop-shadow(-0.018em 0 0 rgba(105, 226, 255, 0.5))
+    drop-shadow(0.018em 0 0 rgba(255, 94, 173, 0.5));
+}
+/* When the ambient track is playing, the title breathes with the music. */
+.hero-title {
+  transition: filter 120ms linear;
+}
+.fx-audio-live .hero-title {
+  filter:
+    drop-shadow(0 0 calc(28px + var(--audio-energy) * 46px) rgba(143, 114, 255, calc(0.3 + var(--audio-energy) * 0.4)))
+    drop-shadow(calc(-0.016em - var(--audio-energy) * 0.02em) 0 0 rgba(105, 226, 255, 0.55))
+    drop-shadow(calc(0.016em + var(--audio-energy) * 0.02em) 0 0 rgba(255, 94, 173, 0.55));
+}
+
+.section h2.gradient-text,
+h2.gradient-text {
+  filter:
+    drop-shadow(-0.012em 0 0 rgba(105, 226, 255, 0.4))
+    drop-shadow(0.012em 0 0 rgba(255, 94, 173, 0.4));
+}
+
+/* --------------------------------------------------------------------------
+   7. Each zone is its own room — temperature shifts at section boundaries.
+   Same skeleton, different air.
+   -------------------------------------------------------------------------- */
+
+/* No Moon: colder, heavier, almost liturgical. Gold on near-black. */
+.no-moon-section {
+  position: relative;
+}
+.no-moon-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(80% 60% at 50% 0%, rgba(255, 210, 122, 0.05), transparent 60%),
+    linear-gradient(180deg, rgba(4, 5, 12, 0.55), rgba(2, 2, 7, 0.7));
+}
+.no-moon-section h2 {
+  letter-spacing: -0.01em;
+  text-shadow: 0 0 30px rgba(255, 210, 122, 0.18);
+}
+.no-moon-section .portal-kicker,
+.no-moon-section .game-feature span {
+  color: var(--gold-soft);
+}
+.no-moon-section .game-feature strong {
+  font-family: "Space Grotesk", sans-serif;
+  letter-spacing: 0.01em;
+}
+
+/* Doopliss: the most lurid room in the house. */
+#music {
+  position: relative;
+}
+#music::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(70% 55% at 78% 8%, rgba(255, 94, 173, 0.08), transparent 58%);
+}
+#music h2 {
+  text-shadow: 0 0 34px rgba(255, 94, 173, 0.28);
+}
+
+/* --------------------------------------------------------------------------
+   8. Hero living field — canvas substrate the headline floats on.
+   -------------------------------------------------------------------------- */
+.hero-field {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1200ms ease;
+}
+.fx-ready .hero-field { opacity: 0.9; }
+
+/* --------------------------------------------------------------------------
+   9. Easter egg — the trapdoor. Hidden until summoned by site-fx.js.
+   -------------------------------------------------------------------------- */
+.fx-secret {
+  position: fixed;
+  inset: 0;
+  z-index: 9500;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(circle at 50% 40%, rgba(8, 6, 18, 0.72), rgba(3, 3, 8, 0.92));
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: opacity 500ms ease;
+}
+.fx-secret.is-open { opacity: 1; pointer-events: auto; }
+
+.fx-secret-card {
+  max-width: 32rem;
+  text-align: center;
+  padding: 2.2rem 2rem;
+  border-radius: var(--radius, 28px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(180deg, rgba(20, 16, 34, 0.92), rgba(10, 8, 20, 0.95));
+  box-shadow: 0 40px 120px rgba(0, 0, 0, 0.6), 0 0 80px rgba(143, 114, 255, 0.18);
+  transform: translateY(14px) scale(0.98);
+  transition: transform 500ms cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+.fx-secret.is-open .fx-secret-card { transform: translateY(0) scale(1); }
+.fx-secret-card .eyebrow { color: var(--gold-soft); margin-bottom: 0.8rem; }
+.fx-secret-card h3 {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: clamp(1.5rem, 4vw, 2.1rem);
+  margin: 0 0 0.8rem;
+  background: linear-gradient(120deg, #ff8fc8, #b8a7ff, #69e2ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.fx-secret-card p { color: var(--muted); margin: 0 auto 1.4rem; max-width: 26rem; }
+.fx-secret-card .fx-secret-close {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1.2rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  cursor: pointer;
+}
+.fx-secret-card .fx-secret-close:hover { background: rgba(255, 255, 255, 0.1); }
+
+/* A tiny dim hint that something is hidden, on the core. */
+.qualia-map .map-core { cursor: help; }
+
+/* --------------------------------------------------------------------------
+   Respect reduced-motion: kill the moving parts, keep the static styling.
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .qualia-links .ql-pulse { animation: none; opacity: 0.55; stroke-dasharray: none; }
+  .fx-cursor { display: none; }
+  .hero-field { transition: none; }
+  .fx-pointer-glow { transition: none; }
+}
