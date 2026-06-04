@@ -25,31 +25,19 @@
   pointer-events: none;
   opacity: 0;
   transition: opacity 600ms ease;
+  /* Lighter colours, normal blending: a fixed mix-blend-mode layer can't be
+     GPU-composited and has to re-rasterize against the scrolling page every
+     frame — the single biggest scroll-jank cause. Promote to its own layer. */
   background:
     radial-gradient(
       26rem 26rem at var(--mx) var(--my),
-      rgba(143, 114, 255, 0.16),
-      rgba(105, 226, 255, 0.07) 38%,
+      rgba(160, 140, 255, 0.12),
+      rgba(120, 230, 255, 0.05) 38%,
       transparent 62%
     );
-  mix-blend-mode: screen;
+  transform: translateZ(0);
 }
 .fx-ready .fx-pointer-glow { opacity: 1; }
-
-/* --------------------------------------------------------------------------
-   2. The descent — page darkens and closes in as you scroll toward the floor.
-   A vignette whose weight is driven by --scroll-depth. Subtle on purpose.
-   -------------------------------------------------------------------------- */
-.fx-descent {
-  position: fixed;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  opacity: calc(var(--scroll-depth) * 0.9);
-  background:
-    radial-gradient(120% 90% at 50% -10%, transparent 52%, rgba(3, 3, 8, 0.55) 100%),
-    linear-gradient(180deg, transparent 40%, rgba(3, 3, 8, 0.32) 100%);
-}
 
 /* --------------------------------------------------------------------------
    3. Film grain — the thin layer of unease. Sits above everything,
@@ -60,10 +48,11 @@
   inset: 0;
   z-index: 9000;
   pointer-events: none;
-  opacity: calc(0.05 + var(--scroll-depth) * 0.035);
-  mix-blend-mode: overlay;
+  opacity: 0.045;
+  /* normal blend + own layer so scrolling never re-rasterizes it */
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='150' height='150'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='150' height='150' filter='url(%23n)'/></svg>");
   background-size: 150px 150px;
+  transform: translateZ(0);
 }
 
 /* --------------------------------------------------------------------------
@@ -329,9 +318,5 @@ h2.gradient-text {
    -------------------------------------------------------------------------- */
 @media (hover: none), (pointer: coarse) {
   .fx-pointer-glow { display: none; }
-  .fx-descent { display: none; }
-  .fx-grain {
-    mix-blend-mode: normal;
-    opacity: 0.03;
-  }
+  .fx-grain { opacity: 0.03; }
 }

@@ -31,7 +31,6 @@
     safe('layers', mountLayers);
     safe('pointer-glow', pointerGlow);
     safe('bloom-cursor', bloomCursor);
-    safe('scroll-descent', scrollDescent);
     safe('qualia-map', qualiaMap);
     safe('hero-field', heroField);
     safe('audio-reactive', audioReactive);
@@ -59,7 +58,6 @@
       return el;
     };
     if (!document.querySelector('.fx-pointer-glow')) make('fx-pointer-glow');
-    if (!document.querySelector('.fx-descent')) make('fx-descent');
     if (!document.querySelector('.fx-grain')) make('fx-grain');
   }
 
@@ -121,27 +119,10 @@
   }
 
   /* ----------------------------------------------------------------------
-     3. The descent — a single scroll-linked variable that quietly turns
-     reading the page into going somewhere lower than where you started.
+     (The scroll-linked "descent" vignette was removed: updating a CSS custom
+     property on :root every scroll frame forced a full style recalc and the
+     extra fixed layer had to re-rasterize on scroll — both measurable jank.)
      ---------------------------------------------------------------------- */
-  function scrollDescent() {
-    // On touch devices the descent layer is hidden (see CSS), and updating a
-    // scroll-linked variable every frame just forces repaints — skip it.
-    if (coarsePointer.matches) return;
-    let queued = false;
-    const update = () => {
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      const depth = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
-      // Ease so the floor of the page feels heavier than a linear ramp.
-      root.style.setProperty('--scroll-depth', (depth * depth).toFixed(4));
-      queued = false;
-    };
-    window.addEventListener('scroll', () => {
-      if (!queued) { queued = true; requestAnimationFrame(update); }
-    }, { passive: true });
-    window.addEventListener('resize', update, { passive: true });
-    update();
-  }
 
   /* ----------------------------------------------------------------------
      4. Wake the qualia map — draw real filaments from the core to each node,

@@ -2103,9 +2103,12 @@
       66%  { transform: translate3d(-1.6%,2.4%,0) scale(1.04); opacity: .92; }
       100% { transform: translate3d(0,0,0)   scale(1);    opacity: .85; }
     }
+    /* Animate only transform/opacity (compositor-cheap). Animating the blur
+       radius re-rasterizes the blur every frame across ~14 glow elements —
+       a constant paint load that compounds scroll jank. Blur stays static. */
     @keyframes glowBreathe {
-      0%, 100% { transform: scale(1);    opacity: .85; filter: blur(60px); }
-      50%      { transform: scale(1.08); opacity: 1;   filter: blur(72px); }
+      0%, 100% { transform: scale(1);    opacity: .85; }
+      50%      { transform: scale(1.08); opacity: 1; }
     }
     @keyframes gradientFlow {
       0%   { background-position: 0% 50%; }
@@ -2126,11 +2129,13 @@
       z-index: 0;
       pointer-events: none;
       background:
-        radial-gradient(circle at 14% 24%, rgba(255,94,173,0.14), transparent 32%),
-        radial-gradient(circle at 86% 22%, rgba(105,226,255,0.11), transparent 30%),
-        radial-gradient(circle at 50% 78%, rgba(143,114,255,0.16), transparent 36%);
+        radial-gradient(circle at 14% 24%, rgba(255,94,173,0.17), transparent 32%),
+        radial-gradient(circle at 86% 22%, rgba(105,226,255,0.14), transparent 30%),
+        radial-gradient(circle at 50% 78%, rgba(143,114,255,0.2), transparent 36%);
       animation: auroraDrift 26s ease-in-out infinite;
-      mix-blend-mode: screen;
+      /* No mix-blend-mode: a fixed blended layer must re-rasterize against the
+         scrolling page every frame. The translate3d animation already promotes
+         this to its own compositor layer, so scrolling stays cheap. */
     }
 
     /* Section glows now breathe + drift */
